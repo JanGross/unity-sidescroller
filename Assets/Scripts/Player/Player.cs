@@ -26,9 +26,15 @@ public class Player : MonoBehaviour
         [SerializeField]
         private GameObject arm;
       
-        public void rotate (float rotation)
+        public void rotateTowardsMouse ()
         {
-            this.arm.transform.rotation = Quaternion.Euler (0, 0, rotation);
+            Vector3 mousePositionInWorldSpace = Helper2D.getMousePosInWorldSpace ();
+            Vector3 armRotation = this.arm.transform.rotation.eulerAngles; 
+            int direction = mousePositionInWorldSpace.x < this.arm.transform.position.x ? -1 : 1;
+            armRotation.z = Vector3.Angle (this.arm.transform.position, mousePositionInWorldSpace) * direction;
+            Debug.Log (armRotation);
+
+            this.arm.transform.rotation = Quaternion.Euler(armRotation);
         }
     }
     public bool debug = false;
@@ -51,7 +57,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update () 
     {
-        this.playerArm.rotate (Time.time);
+        this.playerArm.rotateTowardsMouse ();
         float movementSpeed = this.playerSettings.walkSpeed;
         if (!this.canJump)
         {
@@ -91,9 +97,8 @@ public class Player : MonoBehaviour
             //this.Log ( ""+Vector2.Angle (contactPoint.normal, Vector2.up) );
             if (this.debug)
             {
-                Vector3 point1 = new Vector3 (transform.position.x+1, 
-                                     transform.position.y - (this.collider.bounds.extents.y - this.playerSettings.collisionPadding),
-                                     0);
+                Vector3 point1 = new Vector3 (transform.position.x - this.collider.bounds.extents.x, 
+                                     transform.position.y - (this.collider.bounds.extents.y - this.playerSettings.collisionPadding), 0);
                 Debug.DrawRay (point1, Vector3.left, Color.green);
             }
             if (contactPoint.point.y <= (transform.position.y - (this.collider.bounds.extents.y - this.playerSettings.collisionPadding))) 
@@ -101,8 +106,6 @@ public class Player : MonoBehaviour
                 if (Vector2.Angle (contactPoint.normal, Vector2.up) <= this.playerSettings.maxAngleToJump) 
                 {
                     this.canJump = true;
-                    this.Log ( "enablejump");
-
                 }
             }
         }
