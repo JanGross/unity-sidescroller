@@ -564,7 +564,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1404835609}
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 14.06, y: 5.01, z: 0}
+  m_LocalPosition: {x: 10.8, y: 3.81, z: 0}
   m_LocalScale: {x: 9.900771, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -765,11 +765,11 @@ MonoBehaviour:
   playerName: Unnamed
   playerSettings:
     maxAngleToJump: 45
-    walkSpeed: 10
+    walkSpeed: 5
     airControlSpeed: 5
-    jumpHeight: 10
-    maxVelocity: 0
-    collisionPadding: 0.2
+    jumpHeight: 8
+    maxVelocity: 5
+    collisionPadding: 0.05
   playerArm:
     arm: {fileID: 625659759}
   debug: 1
