@@ -10,6 +10,11 @@ public class Player : MonoBehaviour
     private string playerName = "Unnamed";
     public enum controlSet {keyboard, controller}
     public Settings playerSettings;
+    public bool debug = false;
+
+    private Rigidbody2D rigidbody;
+    private BoxCollider2D collider;
+    private bool canJump = false;
     [SerializeField]
     private PlayerArm playerArm;
    
@@ -35,11 +40,7 @@ public class Player : MonoBehaviour
             this.arm.transform.rotation = Quaternion.Euler(armRotation);
         }
     }
-    public bool debug = false;
 
-    private Rigidbody2D rigidbody;
-    private BoxCollider2D collider;
-    private bool canJump = false;
 
     void Awake ()
     {
@@ -55,6 +56,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update () 
     {
+        getObjectsInRange(5);
         this.playerArm.rotateTowardsMouse ();
         float movementSpeed = this.playerSettings.walkSpeed;
         if (!this.canJump)
@@ -116,7 +118,6 @@ public class Player : MonoBehaviour
         {
             transform.Translate (direction * Time.deltaTime * moveSpeed);
         }
-        Debug.Log (hit.collider);
     }
 
     void Log (string message)
@@ -124,6 +125,19 @@ public class Player : MonoBehaviour
         if (this.debug)
         {
             Debug.Log (message);
+        }
+    }
+
+    private void getObjectsInRange(float range)
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, range);
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            Furniture furniture = colliders[i].gameObject.GetComponent<Furniture>();
+            if (furniture)
+            {
+                furniture.interact();
+            }
         }
     }
 }
